@@ -35,16 +35,17 @@ public class SMSreciever extends BroadcastReceiver
     public void onReceive(Context context, Intent intent) {
 
         SmsMessage[] messages = Telephony.Sms.Intents.getMessagesFromIntent(intent);
-        try {
 
-            count = 1;
+        try {
 
             for (SmsMessage sms : messages)
             {
                 String message = sms.getMessageBody();
                 String address = sms.getOriginatingAddress();
-                orderlist.add("From: "+ address + "\n" + "Order: " + message + "\n");
+                if (message.contains("Order")) {
 
+                    orderlist.add("From: "+ address + "\n" + "Order: " + message + "\n");
+                }
 
             }
 
@@ -57,6 +58,8 @@ public class SMSreciever extends BroadcastReceiver
         }
 
     }
+
+
 
 }
 

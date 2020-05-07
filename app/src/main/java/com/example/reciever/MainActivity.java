@@ -5,30 +5,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Telephony;
-import android.telephony.SmsMessage;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.content.pm.PackageManager;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.Vector;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class  MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     @Override
@@ -41,9 +27,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button start = findViewById(R.id.button);
         Button stop = findViewById(R.id.button3);
+        Button update_selection = findViewById(R.id.button4);
 
         start.setOnClickListener(this);
         stop.setOnClickListener(this);
+        update_selection.setOnClickListener(this);
 
 
     }
@@ -59,13 +47,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.button:
 
-                for (int i = 0; i < SMSreciever.orderlist.size(); i ++){
-
+                for (int i = 0; i < SMSreciever.orderlist.size(); i++){
 
                     TextView textview =  new TextView(this);
                     textview.setText(SMSreciever.orderlist.get(i));
                     orders.addView(textview);
-
                 }
 
                 SMSreciever.orderlist.clear();
@@ -77,9 +63,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 orders.removeAllViews();
                 break;
 
+            case R.id.button4:
+
+                Intent intent = new Intent(this, update_menu.class);
+                startActivity(intent);
+                break;
+
+
             default:
                 throw new IllegalStateException("Unexpected value: " + v.getId());
         }
+
 
 
     }
@@ -105,9 +99,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-
 }
+
+
+
+
+
 
 
 
