@@ -159,11 +159,24 @@ public class update_menu extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
 
+        if(v.getId() == R.id.displaybutton){
+            // TODO retrieve data should display it, not just on data changed
+
+            retrive_data();
+            Toast.makeText(getApplicationContext(), "fuckk u u mmother " ,Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
         if(v.getId() == R.id.buttonreset){
+
+            //TODO add alert dialog for reset button
 
             reset();
             return;
         }
+
+
 
         AlertDialog.Builder areusure = new AlertDialog.Builder(this);
         areusure.setTitle("Update Menu");
@@ -197,18 +210,13 @@ public class update_menu extends AppCompatActivity implements View.OnClickListen
 
     }
 
-    public void retrive_data(){
+    public void retrive_data() {
 
         final TextView menu_item1 = findViewById(R.id.menuitem1);
         final TextView menu_item2 = findViewById(R.id.menuitem2);
         final TextView menu_item3 = findViewById(R.id.menuitem3);
         final TextView menu_item4 = findViewById(R.id.menuitem4);
         final TextView menu_item5 = findViewById(R.id.menuitem5);
-
-
-        final TextView menu_item =  new TextView(this);
-        final LinearLayout orders = findViewById(R.id.menulist);
-
 
         database.addValueEventListener(new ValueEventListener() {
             @Override
@@ -228,6 +236,9 @@ public class update_menu extends AppCompatActivity implements View.OnClickListen
 
                 catch(Exception e){
 
+                    Toast.makeText(getApplicationContext(), "fuckk u u mmother " ,Toast.LENGTH_SHORT).show();
+
+
                 }
 
             }
@@ -244,13 +255,23 @@ public class update_menu extends AppCompatActivity implements View.OnClickListen
 
     public void updatedata(){
 
-         if (i >= 5){
+         if (i >= 5)
+         {
             i = 0;
         }
 
          EditText input = findViewById(R.id.editText);
-         database.child(menuslots[i]).setValue(input.getText().toString());
-         i++;
+
+         if (input.length() != 0)
+         {
+             database.child(menuslots[i]).setValue(input.getText().toString());
+             i++;
+         }
+
+         else if (input.length() == 0){
+
+             Toast.makeText(getApplicationContext(), "fuckk u u mmother " ,Toast.LENGTH_SHORT).show();
+         }
     }
 
     public void reset(){
