@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Vector;
+
 public class update_menu extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     DatabaseReference database;
@@ -36,7 +38,7 @@ public class update_menu extends AppCompatActivity implements View.OnClickListen
     String user;
 
     String[] menuslots = {"Specialfood1", "Specialfood2", "Specialfood3", "Specialfood4", "Specialfood5"};
-    int stall_number = 1;
+    int stall_number;
     int i = 0;
 
     @Override
@@ -44,6 +46,7 @@ public class update_menu extends AppCompatActivity implements View.OnClickListen
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_menu2);
+
 
         spin =  findViewById(R.id.spinner2);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, users);
@@ -57,16 +60,28 @@ public class update_menu extends AppCompatActivity implements View.OnClickListen
         add.setOnClickListener(this);
         reset.setOnClickListener(this);
 
-        database = FirebaseDatabase.getInstance().getReference("Stall " + stall_number);
 
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        TextView menu_title = findViewById(R.id.textView4);
+
         user = users[position];
         stall = position;
+
+        try {
+            database = FirebaseDatabase.getInstance().getReference("Stall " + stall);
+        }
+        catch (Exception e){
+
+            Toast.makeText(getApplicationContext(), "Please select a stall" ,Toast.LENGTH_SHORT).show();
+        }
+
         if (position != 0){
 
+            menu_title.setText("Special Menu of Stall " + stall);
             user_authentication();
 
         }
@@ -90,7 +105,7 @@ public class update_menu extends AppCompatActivity implements View.OnClickListen
         spin =  findViewById(R.id.spinner2);
 
         AlertDialog.Builder areusure = new AlertDialog.Builder(this);
-        areusure.setTitle("Title");
+        areusure.setTitle("Password");
 
 
         final EditText input = new EditText(this);
@@ -183,21 +198,38 @@ public class update_menu extends AppCompatActivity implements View.OnClickListen
     }
 
     public void retrive_data(){
+
+        final TextView menu_item1 = findViewById(R.id.menuitem1);
+        final TextView menu_item2 = findViewById(R.id.menuitem2);
+        final TextView menu_item3 = findViewById(R.id.menuitem3);
+        final TextView menu_item4 = findViewById(R.id.menuitem4);
+        final TextView menu_item5 = findViewById(R.id.menuitem5);
+
+
         final TextView menu_item =  new TextView(this);
         final LinearLayout orders = findViewById(R.id.menulist);
-        orders.addView(menu_item);
 
-        if (i > 4) {
 
-            i = 0;
-        }
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                String value = dataSnapshot.child(menuslots[i]).getValue(String.class);
-                menu_item.setText(value);
-                i++;
+                try {
+
+                    menu_item1.setText( dataSnapshot.child(menuslots[0]).getValue(String.class));
+                    menu_item2.setText( dataSnapshot.child(menuslots[1]).getValue(String.class));
+                    menu_item3.setText( dataSnapshot.child(menuslots[2]).getValue(String.class));
+                    menu_item4.setText( dataSnapshot.child(menuslots[3]).getValue(String.class));
+                    menu_item5.setText( dataSnapshot.child(menuslots[4]).getValue(String.class));
+
+
+                }
+
+
+                catch(Exception e){
+
+                }
+
             }
 
             @Override
@@ -212,12 +244,13 @@ public class update_menu extends AppCompatActivity implements View.OnClickListen
 
     public void updatedata(){
 
-         if (i > 4){
+         if (i >= 5){
             i = 0;
         }
-        EditText input = findViewById(R.id.editText);
-        database.child(menuslots[i]).setValue(input.getText().toString());
-        i++;
+
+         EditText input = findViewById(R.id.editText);
+         database.child(menuslots[i]).setValue(input.getText().toString());
+         i++;
     }
 
     public void reset(){
@@ -226,6 +259,8 @@ public class update_menu extends AppCompatActivity implements View.OnClickListen
 
             database.child(menuslots[i]).setValue(null);
         }
+
+        i = 0;
 
 
     }
